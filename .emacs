@@ -8,6 +8,14 @@
 (column-number-mode 1)
 (show-paren-mode 1)
 
+(defun save-buffer-n-revert (&optional args)
+  "When you save a buffer under a different extension, this will reload the correct modes for it."
+  (interactive)
+  (save-buffer args)
+  (revert-buffer nil t)
+)
+(global-set-key (kbd "C-x C-s") 'save-buffer-n-revert)
+
 ;; --------------------- load paths ---------------------
 (add-to-list 'load-path (concat (get-home-directory) "/site-lisp"))
 
@@ -87,6 +95,14 @@
 	(message "Refreshing open files")
 )
 
+(defun equal-split (num)
+  "Split the frame into num equal sized sub-windows."
+  (interactive "nNumber of subwindows: ")
+  (let ( (width (/ (window-width) num)) (cur-win nil) )
+    (while (progn (setq cur-win (split-window cur-win width t)) (setq num (1- num)) (> num 1)) )
+  )
+)
+
 (defun get-compile-command (prefix)
   (if (= prefix 1)
       (concat "g++ " (buffer-name) " -O2 -Wall")
@@ -143,6 +159,7 @@
 (global-set-key (kbd "M-4") 'zuza-close-tmp-buffers)
 (global-set-key (kbd "M-p") 'previous-error)
 (global-set-key (kbd "M-n") 'next-error)
+(global-set-key (kbd "C-c C-r") 'revert-all-buffers)
 
 (add-hook 'graphviz-dot-mode-hook
       (lambda () (local-set-key (kbd "M-3") 'graphviz-dot-preview))
