@@ -16,6 +16,11 @@
 )
 (global-set-key (kbd "C-x C-s") 'save-buffer-n-revert)
 
+;; Hack - in java mode revert-buffer causes syntax highlighting to be dropped
+(add-hook 'java-mode-hook
+          (lambda () (local-set-key (kbd "C-x C-s") 'save-buffer))
+)
+
 ;; --------------------- load paths ---------------------
 (add-to-list 'load-path (concat (get-home-directory) "/site-lisp"))
 
@@ -204,21 +209,19 @@
  '(safe-local-variable-values (quote ((compile-suffix . "-lboost_date_time -lboost_filesystem -lglog -lgflags") (compile-suffix . "-lboost_date_time -lboost_filesystem -lboost_thread") (compile-suffix . "-lboost_date_time -lboost_filesystem"))))
  '(save-abbrevs nil))
 
-(ede-cpp-root-project "boost_projekt"
- 	        :name "Moj boost projekt"
-                :file "/home/gzuzic/Downloads/boost_1_47_0/INSTALL"
-                :include-path '("/"
-                               )
-                :system-include-path '("/usr/include"
-                                      "/usr/local/include"
-                                       )
-)
+;; (ede-cpp-root-project "boost_projekt"
+;;  	        :name "Moj boost projekt"
+;;                 :file "/home/gzuzic/Downloads/boost_1_47_0/INSTALL"
+;;                 :include-path '("/"
+;;                                )
+;;                 :system-include-path '("/usr/include"
+;;                                       "/usr/local/include"
+;;                                        )
+;; )
 
-(ede-cpp-root-project "boost_fajlovi"
- 	        :name "Moji fajlici"
-                :file "/home/gzuzic/work/boost/mpl.cpp"
-                :include-path '("/home/gzuzic/Downloads/boost_1_47_0/"
-                               )
-)
-
-
+;; (ede-cpp-root-project "boost_fajlovi"
+;;  	        :name "Moji fajlici"
+;;                 :file "/home/gzuzic/work/boost/mpl.cpp"
+;;                 :include-path '("/home/gzuzic/Downloads/boost_1_47_0/"
+;;                                )
+;; )
