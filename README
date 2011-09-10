@@ -1,0 +1,2 @@
+Tested with emacs 23.2.1.. This repo should be self sufficient.
+Add your personal configuration to the file "private.el"

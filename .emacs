@@ -209,6 +209,10 @@
  '(safe-local-variable-values (quote ((compile-suffix . "-lboost_date_time -lboost_filesystem -lglog -lgflags") (compile-suffix . "-lboost_date_time -lboost_filesystem -lboost_thread") (compile-suffix . "-lboost_date_time -lboost_filesystem"))))
  '(save-abbrevs nil))
 
+(if (file-readable-p "private.el")
+    (load-file "private.el")
+)
+
 ;; (ede-cpp-root-project "boost_projekt"
 ;;  	        :name "Moj boost projekt"
 ;;                 :file "/home/gzuzic/Downloads/boost_1_47_0/INSTALL"
