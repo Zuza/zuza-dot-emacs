@@ -18,7 +18,7 @@
 
 ;; Hack - in java mode revert-buffer causes syntax highlighting to be dropped
 (add-hook 'java-mode-hook
-          (lambda () (local-set-key (kbd "C-x C-s") 'save-buffer))
+  (lambda () (local-set-key (kbd "C-x C-s") 'save-buffer))
 )
 
 ;; --------------------- load paths ---------------------
@@ -56,8 +56,17 @@
 
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
-  '(auto-save-file-name-transforms '((".*" "~/.emacs.d/autosaves/\\1" t)))
-  '(backup-directory-alist '((".*" . "~/.emacs.d/backups/"))))
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(auto-save-file-name-transforms (quote ((".*" "~/.emacs.d/autosaves/\\1" t))))
+ '(backup-directory-alist (quote ((".*" . "~/.emacs.d/backups/"))))
+ '(ecb-options-version "2.40")
+ '(inhibit-startup-screen t)
+ '(org-startup-indented t)
+ '(safe-local-variable-values (quote ((compile-suffix . "-lboost_date_time -lboost_filesystem -lglog -lgflags") (compile-suffix . "-lboost_date_time -lboost_filesystem -lboost_thread") (compile-suffix . "-lboost_date_time -lboost_filesystem"))))
+ '(save-abbrevs nil))
 ;; create the autosave dir if necessary, since emacs won't.
 (make-directory "~/.emacs.d/autosaves/" t)
 
@@ -199,33 +208,14 @@
 )
 (add-hook 'c-mode-common-hook 'my-cedet-hook)
 
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(ecb-options-version "2.40")
- '(inhibit-startup-screen t)
- '(safe-local-variable-values (quote ((compile-suffix . "-lboost_date_time -lboost_filesystem -lglog -lgflags") (compile-suffix . "-lboost_date_time -lboost_filesystem -lboost_thread") (compile-suffix . "-lboost_date_time -lboost_filesystem"))))
- '(save-abbrevs nil))
+
 
 (if (file-readable-p "private.el")
     (load-file "private.el")
 )
-
-;; (ede-cpp-root-project "boost_projekt"
-;;  	        :name "Moj boost projekt"
-;;                 :file "/home/gzuzic/Downloads/boost_1_47_0/INSTALL"
-;;                 :include-path '("/"
-;;                                )
-;;                 :system-include-path '("/usr/include"
-;;                                       "/usr/local/include"
-;;                                        )
-;; )
-
-;; (ede-cpp-root-project "boost_fajlovi"
-;;  	        :name "Moji fajlici"
-;;                 :file "/home/gzuzic/work/boost/mpl.cpp"
-;;                 :include-path '("/home/gzuzic/Downloads/boost_1_47_0/"
-;;                                )
-;; )
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
