@@ -11,15 +11,14 @@
 (defun save-buffer-n-revert (&optional args)
   "When you save a buffer under a different extension, this will reload the correct modes for it."
   (interactive)
-  (save-buffer args)
-  (revert-buffer nil t)
+  (let ((orig-name (buffer-name)))
+    (save-buffer args)
+    (unless (string= orig-name (buffer-name))
+      (revert-buffer nil t)
+    )
+  )
 )
 (global-set-key (kbd "C-x C-s") 'save-buffer-n-revert)
-
-;; Hack - in java mode revert-buffer causes syntax highlighting to be dropped
-(add-hook 'java-mode-hook
-  (lambda () (local-set-key (kbd "C-x C-s") 'save-buffer))
-)
 
 ;; --------------------- load paths ---------------------
 (add-to-list 'load-path (concat (get-home-directory) "/site-lisp"))
@@ -39,19 +38,53 @@
 
 ;; ------------------------------------------------------
 
-(require 'color-theme)
+;; CEDET
+(setq c-initialization-hook)
+(add-hook 'c-initialization-hook
+  (lambda ()
+    (require 'cedet)
+
+    (global-ede-mode 1)                      ; Enable the Project management system
+    (semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion 
+
+    (require 'semantic-ia)
+    (require 'semantic-gcc)
+    (require 'ecb)
+
+    (load "etags")
+
+    (defun zuza-semantic-ia-fast-jump () (interactive)
+      (ring-insert find-tag-marker-ring (point-marker))
+      (semantic-ia-fast-jump (point))
+    )
+
+    (defun my-cedet-hook ()
+      (local-set-key [(control return)] 'semantic-ia-complete-symbol)
+      (local-set-key "\C-c?" 'semantic-ia-complete-symbol-menu)
+      (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
+      (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle);; ?
+      (local-set-key "\C-cn" 'eassist-switch-h-cpp)
+      (local-set-key "\M-," 'zuza-semantic-ia-fast-jump)
+    )
+
+    (add-hook 'c-mode-common-hook 'my-cedet-hook)
+  )
+)
+
+(run-with-idle-timer 6 nil
+  (lambda ()
+    (require 'color-theme)
+  )
+)
+
 (eval-after-load "color-theme"
-	'(progn 
+	'(progn
 		 (color-theme-initialize)
 		 (color-theme-dark-blue2)
 	 )
 )
 
-(require 'org-install)
 (require 'cl)
-(require 'graphviz-dot-mode)
-(require 'cedet)
-
 (setq-default indent-tabs-mode nil)
 
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
@@ -62,11 +95,10 @@
   ;; If there is more than one, they won't work right.
  '(auto-save-file-name-transforms (quote ((".*" "~/.emacs.d/autosaves/\\1" t))))
  '(backup-directory-alist (quote ((".*" . "~/.emacs.d/backups/"))))
- '(ecb-options-version "2.40")
  '(inhibit-startup-screen t)
- '(org-startup-indented t)
  '(safe-local-variable-values (quote ((compile-suffix . "-lboost_date_time -lboost_filesystem -lglog -lgflags") (compile-suffix . "-lboost_date_time -lboost_filesystem -lboost_thread") (compile-suffix . "-lboost_date_time -lboost_filesystem"))))
- '(save-abbrevs nil))
+ '(save-abbrevs nil)
+)
 ;; create the autosave dir if necessary, since emacs won't.
 (make-directory "~/.emacs.d/autosaves/" t)
 
@@ -79,16 +111,33 @@
 ;; truncate lines that are longer then the buffer window (don't wrap)
 (setq-default truncate-lines t)
 
-(setq default-tab-width 2)
+(setq-default tab-width 2)
 (setq compilation-ask-about-save nil)
 
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(defun org-mode-loader ()
+  (interactive)
+  (unless (boundp 'org-mode-loaded)
+    (setq org-mode-loaded)
+    (require 'org-install)
+    (condition-case nil
+      (require 'org-checklist)   ;; requires a2ps
+      (error (message "Org-checklist ERROR"))
+    )
+  )
+  (org-mode)
+)
+
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode-loader))
 (defmacro safe-var (x)
 	"Safely retrieves the variable if it exists. Suppress the error if it doesn't."
 	(list 'condition-case 'err
 				x
 			(list 'error 'nil)
 	)
+)
+
+(defun kill-all-local-variables-int () (interactive)
+  (kill-all-local-variables)
 )
 
 (defun revert-all-buffers()
@@ -168,54 +217,52 @@
  )
 )
 
-;; Graphviz
 (global-set-key (kbd "M-2") 'compile)
 (global-set-key (kbd "M-4") 'zuza-close-tmp-buffers)
 (global-set-key (kbd "M-p") 'previous-error)
 (global-set-key (kbd "M-n") 'next-error)
-(global-set-key (kbd "C-c C-r") 'revert-all-buffers)
+(global-set-key (kbd "C-c C-]") 'revert-all-buffers)
+(global-set-key (kbd "`") 'dabbrev-expand)
 
-(add-hook 'graphviz-dot-mode-hook
-      (lambda () (local-set-key (kbd "M-3") 'graphviz-dot-preview))
+;; Graphviz
+
+(require 'graphviz-dot-mode)
+(local-set-key (kbd "M-3") 'graphviz-dot-preview)
+
+;; Python - ropemacs mode - requires pymacs and 
+(add-hook 'python-mode-hook 
+  (lambda () (unless (boundp 'ropemacs-loaded)
+               (setq ropemacs-loaded)
+               (condition-case nil ;; pymacs & rope could not exist
+                 (require 'pymacs)
+                 (pymacs-load "ropemacs" "rope-")
+                 (error (message "ropemacs ERROR"))
+               )
+             )
+  )
 )
 
-;; CEDET
-(global-ede-mode 1)                      ; Enable the Project management system
-(semantic-load-enable-code-helpers)      ; Enable prototype help and smart completion 
-
-(require 'semantic-ia)
-(require 'semantic-gcc)
-(require 'ecb) 
-
-(load "etags")
-
-(defun zuza-semantic-ia-fast-jump () (interactive)
-	(ring-insert find-tag-marker-ring (point-marker))
-	(semantic-ia-fast-jump (point))
+;; gnus
+(eval-after-load "gnus"
+  '(progn
+     (setq gnus-select-method '(nnimap "gmail"
+       (nnimap-address "imap.gmail.com")
+       (nnimap-server-port 993)
+       (nnimap-stream ssl))
+     )
+     (setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
+  )
 )
-
-(defun kill-all-local-variables-int () (interactive)
-	(kill-all-local-variables)
-)
-
-(defun my-cedet-hook ()
-  (local-set-key [(control return)] 'semantic-ia-complete-symbol)
-  (local-set-key "\C-c?" 'semantic-ia-complete-symbol-menu)
-  (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
-	(local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle);; ?
-	(local-set-key "\C-cn" 'eassist-switch-h-cpp)
-	(local-set-key "\M-," 'zuza-semantic-ia-fast-jump)
-)
-(add-hook 'c-mode-common-hook 'my-cedet-hook)
-
-
 
 (if (file-readable-p "private.el")
     (load-file "private.el")
 )
+
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- )
+ '(org-level-1 ((t (:inherit outline-1 :foreground "#FFFF80"))))
+ '(org-level-2 ((t (:inherit outline-2 :foreground "#BBAAFF"))))
+)
