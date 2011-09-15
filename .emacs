@@ -120,7 +120,7 @@
     (setq org-mode-loaded)
     (require 'org-install)
     (condition-case nil
-      (require 'org-checklist)   ;; requires a2ps
+        (require 'org-checklist)   ;; requires a2ps
       (error (message "Org-checklist ERROR"))
     )
   )
@@ -234,8 +234,10 @@
   (lambda () (unless (boundp 'ropemacs-loaded)
                (setq ropemacs-loaded)
                (condition-case nil ;; pymacs & rope could not exist
-                 (require 'pymacs)
-                 (pymacs-load "ropemacs" "rope-")
+                   (progn
+                     (require 'pymacs)
+                     (pymacs-load "ropemacs" "rope-")
+                   )
                  (error (message "ropemacs ERROR"))
                )
              )
