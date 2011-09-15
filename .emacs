@@ -71,7 +71,7 @@
   )
 )
 
-(run-with-idle-timer 6 nil
+(run-with-idle-timer 3 nil
   (lambda ()
     (require 'color-theme)
   )
@@ -237,6 +237,7 @@
                    (progn
                      (require 'pymacs)
                      (pymacs-load "ropemacs" "rope-")
+                     (ropemacs-mode)
                    )
                  (error (message "ropemacs ERROR"))
                )
