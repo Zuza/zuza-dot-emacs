@@ -51,7 +51,7 @@
     (require 'semantic-gcc)
     (require 'ecb)
 
-    (load "etags")
+    (require 'etags)
 
     (defun zuza-semantic-ia-fast-jump () (interactive)
       (ring-insert find-tag-marker-ring (point-marker))
@@ -74,6 +74,7 @@
 (run-with-idle-timer 3 nil
   (lambda ()
     (require 'color-theme)
+    (set-face-attribute 'default nil :height 75)
   )
 )
 
@@ -193,6 +194,9 @@
 	(local-set-key "\M-3" 'zuza-quick-run)
 	(local-set-key "\M-n" 'next-error)
 	(local-set-key "\M-p" 'previous-error)
+
+	(local-set-key "<f2>" 'save-and-quick-compile)
+	(local-set-key "<f3>" 'zuza-quick-run)
 )
 
 (add-hook 'c++-mode-hook 'zuza-c++-mode-hook)
@@ -219,6 +223,10 @@
 
 (global-set-key (kbd "M-2") 'compile)
 (global-set-key (kbd "M-4") 'zuza-close-tmp-buffers)
+
+(global-set-key (kbd "<f2>") 'compile)
+(global-set-key (kbd "<f4>") 'zuza-close-tmp-buffers)
+
 (global-set-key (kbd "M-p") 'previous-error)
 (global-set-key (kbd "M-n") 'next-error)
 (global-set-key (kbd "C-c C-]") 'revert-all-buffers)
@@ -227,21 +235,38 @@
 ;; Graphviz
 
 (require 'graphviz-dot-mode)
-(local-set-key (kbd "M-3") 'graphviz-dot-preview)
+(add-hook 'graphviz-dot-mode-hook
+  (lambda ()        
+    (local-set-key (kbd "M-3") 'graphviz-dot-preview)
+  )
+)
 
-;; Python - ropemacs mode - requires pymacs and 
+;; Python - ropemacs mode - require pymacs and rope
 (add-hook 'python-mode-hook 
-  (lambda () (unless (boundp 'ropemacs-loaded)
-               (setq ropemacs-loaded)
-               (condition-case nil ;; pymacs & rope could not exist
-                   (progn
-                     (require 'pymacs)
-                     (pymacs-load "ropemacs" "rope-")
-                     (ropemacs-mode)
-                   )
-                 (error (message "ropemacs ERROR"))
-               )
-             )
+  (lambda () 
+    (when (boundp 'ropemacs-loaded)
+      (condition-case nil ;; pymacs & rope could not exist
+          (ropemacs-mode)
+        (error (message "ropemacs ERROR part 2"))
+      )
+    )
+    (unless (boundp 'ropemacs-loaded)
+      (setq ropemacs-loaded)
+      (condition-case nil ;; pymacs & rope could not exist
+          (progn
+            (require 'pymacs)
+            (pymacs-load "ropemacs" "rope-")
+            (require 'etags)
+          )
+        (error (message "ropemacs ERROR"))
+      )
+      (defun zuza-rope-goto-definition ()
+        (interactive)
+        (ring-insert find-tag-marker-ring (point-marker))
+        (rope-goto-definition)
+      )
+    )
+    (local-set-key (kbd "C-c g") 'zuza-rope-goto-definition)
   )
 )
 
