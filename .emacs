@@ -7,6 +7,8 @@
 (global-font-lock-mode t)
 (column-number-mode 1)
 (show-paren-mode 1)
+;; (menu-bar-mode 0)
+(tool-bar-mode 0)
 
 (defun save-buffer-n-revert (&optional args)
   "When you save a buffer under a different extension, this will reload the correct modes for it."
