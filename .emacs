@@ -197,8 +197,8 @@
 	(local-set-key "\M-n" 'next-error)
 	(local-set-key "\M-p" 'previous-error)
 
-	(local-set-key "<f2>" 'save-and-quick-compile)
-	(local-set-key "<f3>" 'zuza-quick-run)
+	(local-set-key (kbd "<f2>") 'save-and-quick-compile)
+	(local-set-key (kbd "<f3>") 'zuza-quick-run)
 )
 
 (add-hook 'c++-mode-hook 'zuza-c++-mode-hook)
