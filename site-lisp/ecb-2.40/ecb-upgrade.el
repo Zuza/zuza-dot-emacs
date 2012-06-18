@@ -1143,7 +1143,8 @@ options with their old \(before the upgrade/reset) and new values."
 
 ;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: maybe we should set this to pre6
 (defconst ecb-required-cedet-version-min '(1 0 2 6))
-(defconst ecb-required-cedet-version-max '(1 0 4 9))
+;(defconst ecb-required-cedet-version-max '(1 0 4 9))
+(defconst ecb-required-cedet-version-max '(2 1 0 0))
 
 (defvar ecb-all-requirements-available nil)
 
