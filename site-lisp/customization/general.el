@@ -5,6 +5,7 @@
 (column-number-mode 1)
 (show-paren-mode 1)
 (tool-bar-mode 0)
+(recentf-mode t)
 (setq-default indent-tabs-mode nil)
 (setq-default truncate-lines t) ; truncate lines that are longer then the buffer window (don't wrap)
 (setq-default tab-width 2)
@@ -18,7 +19,7 @@
 (run-with-idle-timer 3 nil
   (lambda ()
     (require 'color-theme)
-    (set-face-attribute 'default nil :height 75)
+    (set-face-attribute 'default nil :height 80)
   )
 )
 
