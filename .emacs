@@ -3,7 +3,7 @@
 
 ;; TODO: Probably should change if porting on Windows
 (defun get-home-directory ()
-  (getenv "HOME")
+  (getenv "emacsHOME")
 )
 
 ;; --------------------- load paths ---------------------
