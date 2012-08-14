@@ -26,12 +26,15 @@
 
 ;; elib
 (add-to-list 'load-path (concat (get-home-directory) "/site-lisp/elib-1.0"))
+
+;; workgroups
+(add-to-list 'load-path (concat (get-home-directory) "/site-lisp/workgroups"))
 ;; ------------------------------------------------------
 
 ;; ------------------- Start the loading ----------------
-(load "general.el")
-(load "utility.el")
-
+(load "general")
+(load "utility")
+(load "workgroups-custom")
 (load "cedet-preload")
 
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
@@ -59,7 +62,7 @@
 (load "cpp")
 (load "graphviz-dot-mode")
 (load "perl")
-(load "python")
+(load "python-custom")
 
 ;; --------------- gnus message reader ----------------
 (load "gnus")
