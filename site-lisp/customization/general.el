@@ -15,6 +15,9 @@
 ;; ------------ Navigation --------------
 (windmove-default-keybindings 'meta) ; alt + up/down/left/right
 
+;; ----------- Recentf-mode -------------
+(setq recentf-max-saved-items 50)
+
 ;; ------------ Color theme config ------------
 (run-with-idle-timer 3 nil
   (lambda ()
@@ -35,6 +38,7 @@
 (put 'suspend-tty 'disabled t) ; disable the minimizations
 (put 'suspend-emacs 'disabled t)
 (put 'suspend-frame 'disabled t)
+(put 'transpose-chars 'disabled t)
 
 ;; ----------- Keys ------------------
 (global-set-key (kbd "M-2") 'compile)
