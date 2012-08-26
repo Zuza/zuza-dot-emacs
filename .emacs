@@ -24,6 +24,9 @@
 ;; ECB
 (add-to-list 'load-path (concat (get-home-directory) "/site-lisp/ecb-2.40"))
 
+;; Js2-mode
+(add-to-list 'load-path (concat (get-home-directory) "/site-lisp/js2"))
+
 ;; elib
 (add-to-list 'load-path (concat (get-home-directory) "/site-lisp/elib-1.0"))
 
@@ -39,6 +42,7 @@
 (load "graphviz-dot-mode")
 (load "perl")
 (load "python-custom")
+(load "js2-mode-custom")
 
 ;; --------------- gnus message reader ----------------
 (load "gnus")
