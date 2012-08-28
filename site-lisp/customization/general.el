@@ -18,21 +18,6 @@
 ;; ----------- Recentf-mode -------------
 (setq recentf-max-saved-items 50)
 
-;; ------------ Color theme config ------------
-(run-with-idle-timer 3 nil
-  (lambda ()
-    (require 'color-theme)
-    (set-face-attribute 'default nil :height 80)
-  )
-)
-
-(eval-after-load "color-theme"
-	'(progn
-		 (color-theme-initialize)
-		 (color-theme-dark-blue2)
-	 )
-)
-
 ;; ------------ Disabling ------------
 (put 'kill-region 'disabled t) ; disable the annoying C-w
 (put 'suspend-tty 'disabled t) ; disable the minimizations
