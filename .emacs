@@ -25,7 +25,7 @@
 (add-to-list 'load-path (concat (get-home-directory) "/site-lisp/ecb-2.40"))
 
 ;; Js2-mode
-(add-to-list 'load-path (concat (get-home-directory) "/site-lisp/js2"))
+(add-to-list 'load-path (concat (get-home-directory) "/site-lisp/js2-mode"))
 
 ;; elib
 (add-to-list 'load-path (concat (get-home-directory) "/site-lisp/elib-1.0"))
