@@ -50,10 +50,10 @@
 ;; ------------------- Start the loading ----------------
 (load "general")
 (load "utility")
-(load "workgroups-custom")
 (load "cedet-preload")
 (load "browser")
 (load "color-theme-custom")
+(load "workgroups-custom")
 
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
