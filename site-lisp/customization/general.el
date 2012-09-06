@@ -32,3 +32,10 @@
 (global-set-key (kbd "M-n") 'next-error)
 (global-set-key (kbd "C-c C-]") 'revert-all-buffers)
 (global-set-key (kbd "`") 'dabbrev-expand)
+
+;; better mark command
+(global-set-key (kbd "C-x C-<SPC>")
+                (lambda (p-arg) (interactive "p")
+                  (set-mark-command p-arg)
+                  )
+                )
