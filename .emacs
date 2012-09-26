@@ -41,7 +41,6 @@
 (load "cpp")
 (load "graphviz-dot-mode")
 (load "perl")
-(load "python-custom")
 (load "js2-mode-custom")
 
 ;; --------------- gnus message reader ----------------

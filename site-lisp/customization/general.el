@@ -35,7 +35,8 @@
 
 ;; better mark command
 (global-set-key (kbd "C-x C-<SPC>")
-                (lambda (p-arg) (interactive "p")
-                  (set-mark-command p-arg)
+                (lambda () (interactive)
+                  (set-mark-command 1)
                   )
                 )
+
