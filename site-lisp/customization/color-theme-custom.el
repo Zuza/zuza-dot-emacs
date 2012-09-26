@@ -1,5 +1,5 @@
 ;; ------------ Color theme config ------------
-(if (string= (terminal-name) "")
+(if (window-system)
     (progn
       (require 'color-theme)
       (color-theme-initialize)
